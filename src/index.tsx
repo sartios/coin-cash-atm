@@ -7,7 +7,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const theme = createMuiTheme({
-  palette: {}
+  typography: {
+    fontFamily: 'Poppins'
+  },
+  palette: {
+    text: { primary: '#FFFFFF' },
+    background: { default: '#2C254A', paper: '#3B3363' }
+  }
 });
 
 ReactDOM.render(
