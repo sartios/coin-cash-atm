@@ -37,7 +37,12 @@ const Input = ({ maxBalance, error }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const operation = () => {
+    const operation = (event: KeyboardEvent): void => {
+      const preventedKeys = ['KeyE', 'Minus', 'Plus', 'Equal'];
+      if (preventedKeys.indexOf(event.code) !== -1) {
+        event.preventDefault();
+      }
+
       inputRef?.current?.focus();
     };
     window.addEventListener('keypress', operation);
