@@ -1,3 +1,7 @@
 {
-  "extends": "@coinify/eslint-config-coinify"
+  "extends": "@coinify/eslint-config-coinify",
+  "rules": {
+    "@typescript-eslint/no-extra-parens": "off",
+    "array-bracket-spacing": "off"
+  }
 }
