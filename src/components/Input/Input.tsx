@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
 
 import { makeStyles } from '@material-ui/core';
@@ -34,8 +34,20 @@ interface Props {
 
 const Input = ({ maxBalance, error }: Props) => {
   const classes = useStyles();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const operation = () => {
+      inputRef?.current?.focus();
+    };
+    window.addEventListener('keypress', operation);
+
+    return () => window.removeEventListener('keypress', operation);
+  }, [inputRef]);
+
   return (
     <input
+      ref={inputRef}
       type="number"
       className={cn(classes.root, { [classes.error]: error })}
       autoFocus
