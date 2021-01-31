@@ -4,7 +4,7 @@ import { CssBaseline, Paper, Grid, makeStyles } from '@material-ui/core';
 
 import { ReactComponent as Logo } from './assets/logo.svg';
 
-import { NumPad, WalletBalance } from './components';
+import { NumPad, WalletBalance, Input } from './components';
 
 const useStyles = makeStyles({
   container: {
@@ -15,12 +15,16 @@ const useStyles = makeStyles({
     paddingBottom: 10
   },
   paper: {
-    height: 600
+    height: 600,
+    borderRadius: 14
   },
   numPad: {
     height: '100%',
     display: 'flex',
-    alignItems: 'flex-end'
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    paddingTop: 50,
+    paddingBottom: 10
   },
   balance: { height: '100%', display: 'flex', marginTop: 50, marginLeft: 10 }
 });
@@ -43,6 +47,7 @@ function App() {
                 <WalletBalance value={24687.32} />
               </Grid>
               <Grid item xs={5} className={classes.numPad}>
+                <Input maxBalance={24687.32} error={false} />
                 <NumPad />
               </Grid>
             </Grid>
