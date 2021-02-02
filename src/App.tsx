@@ -60,6 +60,18 @@ function App() {
     changeWithdrawAmount(newValue);
   };
 
+  const doWithdrawAmount = () => {
+    console.log('withdraw amount');
+  };
+
+  const doClearAmount = () => {
+    setWithdrawAmount('');
+  };
+
+  const doCancelProcess = () => {
+    console.log('cancel process');
+  };
+
   return (
     <div>
       <CssBaseline />
@@ -81,7 +93,14 @@ function App() {
                   value={withdrawAmount}
                   onChange={changeWithdrawAmount}
                 />
-                <NumPad onNumClick={changeWithdrawAmountFromNumPad} />
+                <NumPad
+                  onNumClick={changeWithdrawAmountFromNumPad}
+                  actions={{
+                    doWithdrawAmount,
+                    doClearAmount,
+                    doCancelProcess
+                  }}
+                />
               </Grid>
             </Grid>
           </Paper>

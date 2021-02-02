@@ -30,17 +30,40 @@ const numberArraySorted = [
   { type: 'neutral', label: '00', size: 'small', value: '00' }
 ];
 
-const actions = [
-  { type: 'warn', label: 'Clear', variant: 'outlined', size: 'large' },
-  { type: 'danger', label: 'Cancel', variant: 'outlined', size: 'large' },
-  { type: 'primary', label: 'Withdraw', variant: 'contained', size: 'large' }
+const actionButtons = [
+  {
+    type: 'warn',
+    label: 'Clear',
+    variant: 'outlined',
+    size: 'large',
+    actionName: 'doClearAmount'
+  },
+  {
+    type: 'danger',
+    label: 'Cancel',
+    variant: 'outlined',
+    size: 'large',
+    actionName: 'doCancelProcess'
+  },
+  {
+    type: 'primary',
+    label: 'Withdraw',
+    variant: 'contained',
+    size: 'large',
+    actionName: 'doWithdrawAmount'
+  }
 ];
+
+type Dictionary = {
+  [key: string]: () => void;
+};
 
 interface Props {
   onNumClick: (value: number | string) => void;
+  actions: Dictionary;
 }
 
-const NumPad = ({ onNumClick }: Props) => {
+const NumPad = ({ onNumClick, actions }: Props) => {
   const classes = useStyles();
 
   return (
@@ -64,7 +87,7 @@ const NumPad = ({ onNumClick }: Props) => {
       </Grid>
       <Grid item xs={5}>
         <Grid container>
-          {actions.map((item, index) => {
+          {actionButtons.map((item, index) => {
             return (
               <Grid item xs={12} key={`key-${index}`} className={classes.item}>
                 <Button
@@ -72,7 +95,7 @@ const NumPad = ({ onNumClick }: Props) => {
                   label={item.label}
                   variant={item.variant as VariantType}
                   size={item.size as SizeType}
-                  onClick={() => onNumClick(0)}
+                  onClick={actions[item.actionName]}
                 />
               </Grid>
             );
