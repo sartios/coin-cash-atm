@@ -115,13 +115,14 @@ export interface ButtonProps {
   variant: VariantType;
   type: ButtonType;
   size: SizeType;
+  onClick: () => void;
 }
 
 export interface StyleProps {
   variant: VariantType;
 }
 
-const ButtonWrapper = ({ label, variant, type, size }: ButtonProps) => {
+const ButtonWrapper = ({ label, variant, type, size, onClick }: ButtonProps) => {
   const classes = useStyles({ variant });
 
   return (
@@ -133,6 +134,7 @@ const ButtonWrapper = ({ label, variant, type, size }: ButtonProps) => {
         )
       }}
       variant={variant}
+      onClick={onClick}
     >
       {label}
     </Button>

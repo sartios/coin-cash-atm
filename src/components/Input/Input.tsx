@@ -33,25 +33,23 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  maxBalance: number;
   error: boolean;
   errorMessage: string;
   onChange: (amount: string) => void;
-  value: number;
+  value: string;
 }
 
-const Input = ({ maxBalance, error, errorMessage, value, onChange }: Props) => {
+const Input = ({ error, errorMessage, value, onChange }: Props) => {
   const classes = useStyles();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const operation = (event: KeyboardEvent): void => {
-      const preventedKeys = ['KeyE', 'Minus', 'Plus', 'Equal'];
-      if (preventedKeys.indexOf(event.code) !== -1) {
-        event.preventDefault();
-      }
-
+    const operation = () => {
       inputRef?.current?.focus();
+      inputRef?.current?.setSelectionRange(
+        inputRef?.current?.value?.length,
+        inputRef?.current?.value?.length
+      );
     };
     window.addEventListener('keypress', operation);
 
@@ -62,18 +60,24 @@ const Input = ({ maxBalance, error, errorMessage, value, onChange }: Props) => {
     onChange(event.currentTarget.value);
   };
 
+  const handleClick = (): void => {
+    inputRef?.current?.focus();
+    inputRef?.current?.setSelectionRange(
+      inputRef?.current?.value?.length,
+      inputRef?.current?.value?.length
+    );
+  };
+
   return (
     <div className={classes.root}>
       <input
         ref={inputRef}
-        type="number"
-        value={value.toString()}
+        type="text"
+        value={value}
         className={cn(classes.input)}
         autoFocus
-        min={0}
-        max={maxBalance}
-        pattern="^\d*(\.\d{0,2})?$"
         onChange={handleChange}
+        onClick={handleClick}
       />
       <span className={cn(classes.error, { [classes.hidden]: !error })}>{errorMessage}</span>
     </div>

@@ -33,18 +33,31 @@ function App() {
   const classes = useStyles();
   const [balance] = useState(24687.32);
   const [error, setError] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState<number | null>(null);
+  const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
-  const changeWithdrawAmount = (value: string): void => {
-    if (!value) {
-      setWithdrawAmount(null);
+  const changeWithdrawAmount = (value: string): boolean => {
+    //const floatValue = parseFloat(value);
+
+    const regexp = new RegExp(/^\d*(\.\d{0,2})?$/);
+
+    if (Number.isNaN(parseFloat(value))) {
+      setWithdrawAmount('');
       setError(false);
-    } else if (balance >= parseFloat(value)) {
-      setWithdrawAmount(parseFloat(parseFloat(value).toFixed(2)));
-      setError(false);
-    } else {
-      setError(true);
+    } else if (regexp.test(value)) {
+      if (balance >= parseFloat(value)) {
+        setWithdrawAmount(value);
+        setError(false);
+      } else {
+        setError(true);
+      }
     }
+
+    return true;
+  };
+
+  const changeWithdrawAmountFromNumPad = (value: number | string): void => {
+    const newValue = `${withdrawAmount}${value}`;
+    changeWithdrawAmount(newValue);
   };
 
   return (
@@ -63,13 +76,12 @@ function App() {
               </Grid>
               <Grid item xs={5} className={classes.numPad}>
                 <Input
-                  maxBalance={balance}
                   error={error}
                   errorMessage="You cannot exceed wallet's balance"
-                  value={withdrawAmount || 0}
+                  value={withdrawAmount}
                   onChange={changeWithdrawAmount}
                 />
-                <NumPad />
+                <NumPad onNumClick={changeWithdrawAmountFromNumPad} />
               </Grid>
             </Grid>
           </Paper>
