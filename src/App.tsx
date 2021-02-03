@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { CssBaseline, Paper, Grid, makeStyles } from '@material-ui/core';
 
 import { ReactComponent as Logo } from './assets/logo.svg';
-
 import { NumPad, WalletBalance, Input } from './components';
+import { coinChange, initialSupply, calcCashAvailability, toDollars } from './utils';
 
 const useStyles = makeStyles({
   container: {
@@ -29,26 +29,47 @@ const useStyles = makeStyles({
   balance: { height: '100%', display: 'flex', marginTop: 50, marginLeft: 10 }
 });
 
+const getBalanceErrorMessage = (balance: number) =>
+  `You cannot exceed wallet's balance: ${toDollars(balance)}`;
+
+const getAtmCashErrorMessage = (amount: string, maxAmount: number) =>
+  `ATM can not disperse ${toDollars(amount)}. Max available amount ${toDollars(maxAmount)}`;
+
 function App() {
   const classes = useStyles();
-  const [balance] = useState(24687.32);
-  const [error, setError] = useState(false);
+  const [balance] = useState<number>(24687.32);
+  const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
+  const [atmTotalCash, setAtmTotalCash] = useState<number>(calcCashAvailability(initialSupply));
+  const [cashSupply, setCashSupply] = useState<number[][]>(initialSupply);
+  const [amountBreakdown, setAmountBreakdown] = useState<number[]>([]);
+
+  const clearError = () => {
+    setError(false);
+    setErrorMessage('');
+  };
 
   const changeWithdrawAmount = (value: string): void => {
-    //const floatValue = parseFloat(value);
+    const valueAsInt = parseInt(value, 10);
 
     const regexp = new RegExp(/^\d*?$/);
 
-    if (Number.isNaN(parseInt(value, 10))) {
+    if (Number.isNaN(valueAsInt)) {
       setWithdrawAmount('');
-      setError(false);
+      clearError();
     } else if (regexp.test(value)) {
-      if (balance >= parseInt(value, 10)) {
-        setWithdrawAmount(value);
-        setError(false);
+      if (atmTotalCash >= valueAsInt) {
+        if (balance >= valueAsInt) {
+          setWithdrawAmount(value);
+          clearError();
+        } else {
+          setError(true);
+          setErrorMessage(getBalanceErrorMessage(balance));
+        }
       } else {
         setError(true);
+        setErrorMessage(getAtmCashErrorMessage(withdrawAmount, atmTotalCash));
       }
     }
   };
@@ -59,12 +80,17 @@ function App() {
   };
 
   const disperseAmount = () => {
-    console.log('withdraw amount');
+    const { result, newSupply } = coinChange(parseInt(withdrawAmount, 10), cashSupply, []);
+    setCashSupply(newSupply);
+    setAtmTotalCash(calcCashAvailability(newSupply));
+    setAmountBreakdown(result);
+    setWithdrawAmount('');
+    clearError();
   };
 
   const clearAmount = () => {
     setWithdrawAmount('');
-    setError(false);
+    clearError();
   };
 
   const cancelProcess = () => {
@@ -85,10 +111,11 @@ function App() {
               <Grid xs={6} className={classes.balance}>
                 <WalletBalance value={balance} />
               </Grid>
+              <div>{JSON.stringify(amountBreakdown, null, 4)}</div>
               <Grid item xs={5} className={classes.numPad}>
                 <Input
                   error={error}
-                  errorMessage="You cannot exceed wallet's balance"
+                  errorMessage={errorMessage}
                   value={withdrawAmount}
                   onChange={changeWithdrawAmount}
                 />
