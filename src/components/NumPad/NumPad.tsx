@@ -25,9 +25,9 @@ const numberArraySorted = [
   { type: 'neutral', label: 1, size: 'small', value: 1 },
   { type: 'neutral', label: 2, size: 'small', value: 2 },
   { type: 'neutral', label: 3, size: 'small', value: 3 },
-  { type: 'neutral', label: '.', size: 'small', value: '.' },
   { type: 'neutral', label: 0, size: 'small', value: 0 },
-  { type: 'neutral', label: '00', size: 'small', value: '00' }
+  { type: 'neutral', label: '00', size: 'small', value: '00' },
+  { type: 'neutral', label: '000', size: 'small', value: '000' }
 ];
 
 const actionButtons = [
@@ -36,21 +36,21 @@ const actionButtons = [
     label: 'Clear',
     variant: 'outlined',
     size: 'large',
-    actionName: 'doClearAmount'
+    actionName: 'clearAmount'
   },
   {
     type: 'danger',
     label: 'Cancel',
     variant: 'outlined',
     size: 'large',
-    actionName: 'doCancelProcess'
+    actionName: 'cancelProcess'
   },
   {
     type: 'primary',
     label: 'Withdraw',
     variant: 'contained',
     size: 'large',
-    actionName: 'doWithdrawAmount'
+    actionName: 'disperseAmount'
   }
 ];
 

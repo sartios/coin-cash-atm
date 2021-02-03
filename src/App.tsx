@@ -35,24 +35,22 @@ function App() {
   const [error, setError] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
-  const changeWithdrawAmount = (value: string): boolean => {
+  const changeWithdrawAmount = (value: string): void => {
     //const floatValue = parseFloat(value);
 
-    const regexp = new RegExp(/^\d*(\.\d{0,2})?$/);
+    const regexp = new RegExp(/^\d*?$/);
 
-    if (Number.isNaN(parseFloat(value))) {
+    if (Number.isNaN(parseInt(value, 10))) {
       setWithdrawAmount('');
       setError(false);
     } else if (regexp.test(value)) {
-      if (balance >= parseFloat(value)) {
+      if (balance >= parseInt(value, 10)) {
         setWithdrawAmount(value);
         setError(false);
       } else {
         setError(true);
       }
     }
-
-    return true;
   };
 
   const changeWithdrawAmountFromNumPad = (value: number | string): void => {
@@ -60,15 +58,16 @@ function App() {
     changeWithdrawAmount(newValue);
   };
 
-  const doWithdrawAmount = () => {
+  const disperseAmount = () => {
     console.log('withdraw amount');
   };
 
-  const doClearAmount = () => {
+  const clearAmount = () => {
     setWithdrawAmount('');
+    setError(false);
   };
 
-  const doCancelProcess = () => {
+  const cancelProcess = () => {
     console.log('cancel process');
   };
 
@@ -96,9 +95,9 @@ function App() {
                 <NumPad
                   onNumClick={changeWithdrawAmountFromNumPad}
                   actions={{
-                    doWithdrawAmount,
-                    doClearAmount,
-                    doCancelProcess
+                    disperseAmount,
+                    clearAmount,
+                    cancelProcess
                   }}
                 />
               </Grid>

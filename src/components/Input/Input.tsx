@@ -44,7 +44,11 @@ const Input = ({ error, errorMessage, value, onChange }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const operation = () => {
+    const operation = (event: KeyboardEvent): void => {
+      const preventedKeys = ['KeyE', 'Minus', 'Plus', 'Equal', 'NumpadDecimal', 'Period'];
+      if (preventedKeys.indexOf(event.code) !== -1) {
+        event.preventDefault();
+      }
       inputRef?.current?.focus();
       inputRef?.current?.setSelectionRange(
         inputRef?.current?.value?.length,
@@ -72,7 +76,7 @@ const Input = ({ error, errorMessage, value, onChange }: Props) => {
     <div className={classes.root}>
       <input
         ref={inputRef}
-        type="text"
+        type="tel"
         value={value}
         className={cn(classes.input)}
         autoFocus
