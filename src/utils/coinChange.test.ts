@@ -1,4 +1,4 @@
-import coinChange, { initialSupply } from './coinChange';
+import { coinChange, initialSupply } from './coinChange';
 
 describe('Test algorithm for calculating amount denominators', () => {
   it('should return the least amount of denominators', () => {

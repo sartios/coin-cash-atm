@@ -1,4 +1,4 @@
-// import { reduce } from 'lodash';
+import { reduce } from 'lodash';
 
 export const initialSupply = [
   [1000, 100],
@@ -13,14 +13,15 @@ export const initialSupply = [
   [1, 100]
 ];
 
-// const calcAvailability = (supply: number[][]): number => reduce(supply, (acc, coin) => acc + coin[0] * coin[1], 0 );
+export const calcCashAvailability = (supply: number[][]): number =>
+  reduce(supply, (acc, coin) => acc + coin[0] * coin[1], 0);
 
-const coinChange = (
+export const coinChange = (
   amount: number,
   supply: number[][],
   result: number[]
 ): { result: number[]; newSupply: number[][] } => {
-  // if(calcAvailability(supply) < amount) {
+  // if(calcCashAvailability(supply) < amount) {
   //   return { result: [], newSupply: supply };
   // }
 
@@ -45,5 +46,3 @@ const coinChange = (
 
   return { result: currentResult, newSupply: currentSupply };
 };
-
-export default coinChange;
