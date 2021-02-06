@@ -1,5 +1,9 @@
 {
   "extends": "@coinify/eslint-config-coinify",
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "env": {
     "browser": true,
     "es6": true,
