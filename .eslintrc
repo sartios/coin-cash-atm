@@ -1,0 +1,14 @@
+{
+  "extends": "@coinify/eslint-config-coinify",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "mocha": true,
+    "jest": true
+  },
+  "rules": {
+    "@typescript-eslint/no-extra-parens": "off",
+    "array-bracket-spacing": "off"
+  }
+}
