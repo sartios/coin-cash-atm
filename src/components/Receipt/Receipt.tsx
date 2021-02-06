@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { reduce, get, map, keys } from 'lodash';
 import { makeStyles } from '@material-ui/core';
@@ -17,7 +17,6 @@ const useStyles = makeStyles({
 interface Props {
   total: string;
   cash: number[];
-  hide: boolean;
   newTransaction: () => void;
 }
 
@@ -30,12 +29,20 @@ const operation = (acc: Dictionary, value: number): Dictionary => ({
   [`${value}`]: get(acc, `${value}`, 0) + 1
 });
 
-const Receipt = ({ cash, total, hide, newTransaction }: Props) => {
+const Receipt = ({ cash, total, newTransaction }: Props) => {
   const classes = useStyles();
 
-  if (hide) {
-    return null;
-  }
+  useEffect(() => {
+    const operation = (event: KeyboardEvent): void => {
+      if (event.key === 'Enter') {
+        newTransaction();
+      }
+    };
+
+    window.addEventListener('keypress', operation);
+
+    return () => window.removeEventListener('keypress', operation);
+  }, []);
 
   const amount = reduce(cash, operation, {});
   const timestamp = new Date();
