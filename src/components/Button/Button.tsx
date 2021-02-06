@@ -16,6 +16,7 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
     borderRadius: 14,
     textTransform: 'none'
   },
+  full: { borderRadius: 14, textTransform: 'none' },
   neutral: ({ variant }) => {
     if (variant === 'contained') {
       return {
@@ -108,7 +109,7 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
 
 export type VariantType = 'outlined' | 'contained';
 export type ButtonType = 'neutral' | 'primary' | 'danger' | 'warn';
-export type SizeType = 'small' | 'large';
+export type SizeType = 'small' | 'large' | 'full';
 
 export interface ButtonProps {
   label: string | number;
@@ -135,6 +136,7 @@ const ButtonWrapper = ({ label, variant, type, size, onClick }: ButtonProps) => 
       }}
       variant={variant}
       onClick={onClick}
+      fullWidth={size === 'full'}
     >
       {label}
     </Button>

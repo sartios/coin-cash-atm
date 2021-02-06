@@ -37,10 +37,14 @@ interface Props {
   errorMessage: string;
   onChange: (amount: string) => void;
   value: string;
-  disabled: boolean;
+  hide: boolean;
 }
 
-const Input = ({ error, errorMessage, value, disabled, onChange }: Props) => {
+const Input = ({ error, errorMessage, value, hide, onChange }: Props) => {
+  if (hide) {
+    return null;
+  }
+
   const classes = useStyles();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,8 +85,8 @@ const Input = ({ error, errorMessage, value, disabled, onChange }: Props) => {
         value={value}
         className={cn(classes.input)}
         autoFocus
-        onChange={disabled ? () => false : handleChange}
-        onClick={disabled ? () => false : handleClick}
+        onChange={hide ? () => false : handleChange}
+        onClick={hide ? () => false : handleClick}
       />
       <span className={cn(classes.error, { [classes.hidden]: !error })}>{errorMessage}</span>
     </div>

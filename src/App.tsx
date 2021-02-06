@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { CssBaseline, Paper, Grid, makeStyles } from '@material-ui/core';
 
 import { ReactComponent as Logo } from './assets/logo.svg';
-import { NumPad, WalletBalance, Input } from './components';
+import { NumPad, WalletBalance, Input, Receipt } from './components';
 import { coinChange, initialSupply, calcCashAvailability, toDollars } from './utils';
 
 const useStyles = makeStyles({
@@ -32,13 +32,14 @@ const useStyles = makeStyles({
 const getBalanceErrorMessage = (balance: number) =>
   `You cannot exceed wallet's balance: ${toDollars(balance)}`;
 
-const getAtmCashErrorMessage = (amount: string, maxAmount: number) =>
-  `ATM can not disperse ${toDollars(amount)}. Max available amount ${toDollars(maxAmount)}`;
+const getAtmCashErrorMessage = (maxAmount: number) =>
+  `ATM can disperse up to  ${toDollars(maxAmount)}`;
 
 function App() {
   const classes = useStyles();
-  const [balance] = useState<number>(24687.32);
+  const [balance, setBalance] = useState<number>(24687.32);
   const [error, setError] = useState<boolean>(false);
+  const [showReceipt, setShowReceipt] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
   const [atmTotalCash, setAtmTotalCash] = useState<number>(calcCashAvailability(initialSupply));
@@ -69,7 +70,7 @@ function App() {
         }
       } else {
         setError(true);
-        setErrorMessage(getAtmCashErrorMessage(withdrawAmount, atmTotalCash));
+        setErrorMessage(getAtmCashErrorMessage(atmTotalCash));
       }
     }
   };
@@ -81,10 +82,11 @@ function App() {
 
   const disperseAmount = () => {
     const { result, newSupply } = coinChange(parseInt(withdrawAmount, 10), cashSupply, []);
+    setBalance(balance - parseInt(withdrawAmount, 10));
     setCashSupply(newSupply);
     setAtmTotalCash(calcCashAvailability(newSupply));
     setAmountBreakdown(result);
-    setWithdrawAmount('');
+    setShowReceipt(true);
     clearError();
   };
 
@@ -95,6 +97,13 @@ function App() {
 
   const cancelProcess = () => {
     console.log('cancel process');
+  };
+
+  const newTransaction = () => {
+    setWithdrawAmount('');
+    setShowReceipt(false);
+    setAmountBreakdown([]);
+    clearError();
   };
 
   return (
@@ -111,13 +120,19 @@ function App() {
               <Grid xs={6} className={classes.balance}>
                 <WalletBalance value={balance} />
               </Grid>
-              <div>{JSON.stringify(amountBreakdown, null, 4)}</div>
               <Grid item xs={5} className={classes.numPad}>
                 <Input
                   error={error}
                   errorMessage={errorMessage}
                   value={withdrawAmount}
                   onChange={changeWithdrawAmount}
+                  hide={showReceipt}
+                />
+                <Receipt
+                  cash={amountBreakdown}
+                  hide={!showReceipt}
+                  total={withdrawAmount}
+                  newTransaction={newTransaction}
                 />
                 <NumPad
                   onNumClick={changeWithdrawAmountFromNumPad}
@@ -126,6 +141,7 @@ function App() {
                     clearAmount,
                     cancelProcess
                   }}
+                  hide={showReceipt}
                 />
               </Grid>
             </Grid>
