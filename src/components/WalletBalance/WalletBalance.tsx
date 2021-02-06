@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 
 import { ReactComponent as BTCLogo } from '../../assets/btc_logo.svg';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
     width: 339,
@@ -13,13 +13,20 @@ const useStyles = makeStyles({
     borderRadius: 14,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: { width: '100%' }
   },
   logo: {
     position: 'absolute',
     left: '50%',
     top: '-50%',
-    transform: 'translate(-50%, 20%)'
+    transform: 'translate(-50%, 20%)',
+    [theme.breakpoints.down('sm')]: {
+      top: -10,
+      left: 30,
+      width: 60,
+      height: 60
+    }
   },
   balance: {
     fontWeight: 600,
@@ -27,7 +34,7 @@ const useStyles = makeStyles({
     cursor: 'pointer',
     userSelect: 'none'
   }
-});
+}));
 
 interface Props {
   value: number;

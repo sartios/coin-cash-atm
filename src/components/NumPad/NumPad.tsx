@@ -61,18 +61,14 @@ type Dictionary = {
 interface Props {
   onNumClick: (value: number | string) => void;
   actions: Dictionary;
-  hide: boolean;
+  className: string;
 }
 
-const NumPad = ({ onNumClick, actions, hide }: Props) => {
+const NumPad = ({ onNumClick, actions, className }: Props) => {
   const classes = useStyles();
 
-  if (hide) {
-    return null;
-  }
-
   return (
-    <Grid container>
+    <Grid container className={className}>
       <Grid item xs={7}>
         <Grid container className={classes.container}>
           {numberArraySorted.map((item, index) => {

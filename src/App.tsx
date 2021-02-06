@@ -6,7 +6,7 @@ import { ReactComponent as Logo } from './assets/logo.svg';
 import { NumPad, WalletBalance, Input, Receipt } from './components';
 import { coinChange, initialSupply, calcCashAvailability, toDollars } from './utils';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   container: {
     justifyContent: 'center'
   },
@@ -16,9 +16,15 @@ const useStyles = makeStyles({
   },
   paper: {
     height: 600,
-    borderRadius: 14
+    borderRadius: 14,
+    [theme.breakpoints.down('sm')]: {
+      height: 'max-content',
+      paddingRight: 24,
+      paddingLeft: 24,
+      paddingBottom: 40
+    }
   },
-  numPad: {
+  numPadContainer: {
     height: '100%',
     display: 'flex',
     justifyContent: 'space-between',
@@ -26,8 +32,21 @@ const useStyles = makeStyles({
     paddingTop: 50,
     paddingBottom: 10
   },
-  balance: { height: '100%', display: 'flex', marginTop: 50, marginLeft: 10 }
-});
+  balance: {
+    height: '100%',
+    display: 'flex',
+    marginTop: 50,
+    marginLeft: 10,
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 0
+    }
+  },
+  numPad: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
+  }
+}));
 
 const getBalanceErrorMessage = (balance: number) =>
   `You cannot exceed wallet's balance: ${toDollars(balance)}`;
@@ -114,35 +133,40 @@ function App() {
           <Logo />
         </Grid>
 
-        <Grid item xs={8} xl={6} className={classes.item}>
+        <Grid item xs={12} xl={6} className={classes.item}>
           <Paper className={classes.paper}>
             <Grid container style={{ height: '100%' }}>
-              <Grid xs={6} className={classes.balance}>
+              <Grid xs={12} md={6} className={classes.balance}>
                 <WalletBalance value={balance} />
               </Grid>
-              <Grid item xs={5} className={classes.numPad}>
-                <Input
-                  error={error}
-                  errorMessage={errorMessage}
-                  value={withdrawAmount}
-                  onChange={changeWithdrawAmount}
-                  hide={showReceipt}
-                />
-                <Receipt
-                  cash={amountBreakdown}
-                  hide={!showReceipt}
-                  total={withdrawAmount}
-                  newTransaction={newTransaction}
-                />
-                <NumPad
-                  onNumClick={changeWithdrawAmountFromNumPad}
-                  actions={{
-                    disperseAmount,
-                    clearAmount,
-                    cancelProcess
-                  }}
-                  hide={showReceipt}
-                />
+              <Grid item xs={12} md={5} className={classes.numPadContainer}>
+                {!showReceipt && (
+                  <Input
+                    error={error}
+                    errorMessage={errorMessage}
+                    value={withdrawAmount}
+                    onChange={changeWithdrawAmount}
+                    onSubmit={disperseAmount}
+                  />
+                )}
+                {showReceipt && (
+                  <Receipt
+                    cash={amountBreakdown}
+                    total={withdrawAmount}
+                    newTransaction={newTransaction}
+                  />
+                )}
+                {!showReceipt && (
+                  <NumPad
+                    className={classes.numPad}
+                    onNumClick={changeWithdrawAmountFromNumPad}
+                    actions={{
+                      disperseAmount,
+                      clearAmount,
+                      cancelProcess
+                    }}
+                  />
+                )}
               </Grid>
             </Grid>
           </Paper>

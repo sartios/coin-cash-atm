@@ -35,35 +35,38 @@ const useStyles = makeStyles({
 interface Props {
   error: boolean;
   errorMessage: string;
-  onChange: (amount: string) => void;
   value: string;
-  hide: boolean;
+  onChange: (amount: string) => void;
+  onSubmit: () => void;
 }
 
-const Input = ({ error, errorMessage, value, hide, onChange }: Props) => {
-  if (hide) {
-    return null;
-  }
-
+const Input = ({ error, errorMessage, value, onChange, onSubmit }: Props) => {
   const classes = useStyles();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const operation = (event: KeyboardEvent): void => {
       const preventedKeys = ['KeyE', 'Minus', 'Plus', 'Equal', 'NumpadDecimal', 'Period'];
+
       if (preventedKeys.indexOf(event.code) !== -1) {
         event.preventDefault();
       }
+
+      if (event.key === 'Enter') {
+        onSubmit();
+      }
+
       inputRef?.current?.focus();
       inputRef?.current?.setSelectionRange(
         inputRef?.current?.value?.length,
         inputRef?.current?.value?.length
       );
     };
+
     window.addEventListener('keypress', operation);
 
     return () => window.removeEventListener('keypress', operation);
-  }, [inputRef]);
+  }, [inputRef, onSubmit]);
 
   const handleChange = (event: FormEvent<HTMLInputElement>): void => {
     onChange(event.currentTarget.value);
@@ -85,8 +88,8 @@ const Input = ({ error, errorMessage, value, hide, onChange }: Props) => {
         value={value}
         className={cn(classes.input)}
         autoFocus
-        onChange={hide ? () => false : handleChange}
-        onClick={hide ? () => false : handleClick}
+        onChange={handleChange}
+        onClick={handleClick}
       />
       <span className={cn(classes.error, { [classes.hidden]: !error })}>{errorMessage}</span>
     </div>
