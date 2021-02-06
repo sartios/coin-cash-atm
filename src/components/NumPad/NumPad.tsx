@@ -61,10 +61,15 @@ type Dictionary = {
 interface Props {
   onNumClick: (value: number | string) => void;
   actions: Dictionary;
+  hide: boolean;
 }
 
-const NumPad = ({ onNumClick, actions }: Props) => {
+const NumPad = ({ onNumClick, actions, hide }: Props) => {
   const classes = useStyles();
+
+  if (hide) {
+    return null;
+  }
 
   return (
     <Grid container>
