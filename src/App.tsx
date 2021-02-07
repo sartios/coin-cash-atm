@@ -79,17 +79,18 @@ function App() {
       setWithdrawAmount('');
       clearError();
     } else if (regexp.test(value)) {
-      if (atmTotalCash >= valueAsInt) {
-        if (balance >= valueAsInt) {
-          setWithdrawAmount(value);
-          clearError();
-        } else {
-          setError(true);
-          setErrorMessage(getBalanceErrorMessage(balance));
-        }
-      } else {
+      if (atmTotalCash >= valueAsInt && balance >= valueAsInt) {
+        // Cash availability & possible amount
+        setWithdrawAmount(value);
+        clearError();
+      } else if (atmTotalCash <= valueAsInt && balance >= valueAsInt) {
+        // Possible amount but not cash availability
         setError(true);
         setErrorMessage(getAtmCashErrorMessage(atmTotalCash));
+      } else if (balance <= valueAsInt) {
+        // Bad amount
+        setError(true);
+        setErrorMessage(getBalanceErrorMessage(balance));
       }
     }
   };
