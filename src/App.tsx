@@ -100,13 +100,21 @@ function App() {
   };
 
   const disperseAmount = () => {
-    const { result, newSupply } = coinChange(parseInt(withdrawAmount, 10), cashSupply, []);
-    setBalance(balance - parseInt(withdrawAmount, 10));
-    setCashSupply(newSupply);
-    setAtmTotalCash(calcCashAvailability(newSupply));
-    setAmountBreakdown(result);
-    setShowReceipt(true);
-    clearError();
+    const amount = parseInt(withdrawAmount, 10);
+    if (!Number.isNaN(amount) && amount > 0) {
+      const { result, newSupply } = coinChange(amount, cashSupply, []);
+      setBalance(balance - amount);
+      setCashSupply(newSupply);
+      setAtmTotalCash(calcCashAvailability(newSupply));
+      setAmountBreakdown(result);
+      setShowReceipt(true);
+      clearError();
+    }
+
+    if (amount === 0) {
+      setError(true);
+      setErrorMessage('Please enter a valid amount');
+    }
   };
 
   const clearAmount = () => {
