@@ -142,7 +142,7 @@ function App() {
           <Logo />
         </Grid>
 
-        <Grid item xs={12} xl={6} className={classes.item}>
+        <Grid item xs={12} md={10} lg={8} className={classes.item}>
           <Paper className={classes.paper}>
             <Grid container style={{ height: '100%' }}>
               <Grid xs={12} md={6} className={classes.balance}>
