@@ -48,21 +48,33 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+// Error message when the amount that user enters is greater than wallet's balance
 const getBalanceErrorMessage = (balance: number) =>
   `You cannot exceed wallet's balance: ${toDollars(balance)}`;
 
+// Error message for when the ATM can not serve the requested amount and the wallet has the balance.
+// The message suggests the max amount the user can withdraw.
+// To test this case, reduce the ATM's initial availability.
 const getAtmCashErrorMessage = (maxAmount: number) =>
   `ATM can disperse up to  ${toDollars(maxAmount)}`;
 
 function App() {
   const classes = useStyles();
+  // Wallet's balance
   const [balance, setBalance] = useState<number>(24687.32);
+  // Whether an error has been occurred. It can be removed and use the error message instead.
   const [error, setError] = useState<boolean>(false);
+  // Show transaction's receipt
   const [showReceipt, setShowReceipt] = useState<boolean>(false);
+  // The actual error message. Currently, there are 2 error messages that may occur.
   const [errorMessage, setErrorMessage] = useState<string>('');
+  // The amount to withdraw
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
+  // The total amount that the atm can disperse as a cached number
   const [atmTotalCash, setAtmTotalCash] = useState<number>(calcCashAvailability(initialSupply));
+  // The new supply of the ATM once the user withdrew money
   const [cashSupply, setCashSupply] = useState<number[][]>(initialSupply);
+  // How the amount to withdraw will be served
   const [amountBreakdown, setAmountBreakdown] = useState<number[]>([]);
 
   const clearError = () => {

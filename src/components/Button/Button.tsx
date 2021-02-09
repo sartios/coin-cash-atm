@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { Button, makeStyles } from '@material-ui/core';
 import { Theme } from '@material-ui/core';
 
+// TODO: use colors from theme
 const useStyles = makeStyles<Theme, StyleProps>(() => ({
   small: {
     width: 63,
