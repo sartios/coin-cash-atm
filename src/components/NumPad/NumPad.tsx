@@ -14,7 +14,6 @@ const useStyles = makeStyles({
   }
 });
 
-// eslint-disable-next-line array-bracket-spacing
 const numberArraySorted = [
   { type: 'neutral', label: 7, size: 'small', value: 7 },
   { type: 'neutral', label: 8, size: 'small', value: 8 },
